@@ -27,8 +27,6 @@ class Email
 
     private function ensureIsValidEmail(string $email): void
     {
-        $today = Carbon::now();
-        var_dump($today);
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new InvalidArgumentException(
                 sprintf(
