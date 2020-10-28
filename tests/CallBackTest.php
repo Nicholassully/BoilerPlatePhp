@@ -2,15 +2,19 @@
 
 declare(strict_types=1);
 
+namespace BoilerPlatePhp\Tests;
+
+use BoilerPlatePhp\CallBack;
+use BoilerPlatePhp\TimePeriods;
 use PHPUnit\Framework\TestCase;
 
 final class CallBackTest extends TestCase
 {
     public function testCallBackClass(): void
     {
-        $callback = new CallBack('Bob', '01/01/2015', 6 ,  TimePeriod::Day);
+        $callback = new CallBack('Bob', '01/01/2015', 6 ,  TimePeriods::Day);
 
-        self::assertEquals('bob', $callback->getName());
+        self::assertEquals('Bob', $callback->getName());
     }
 //
 //    public function testCallBackHasANameDateAndCallBackDate(): string

@@ -1,6 +1,8 @@
 <?php
 
-abstract class TimePeriod
+namespace BoilerPlatePhp;
+
+abstract class TimePeriods
 {
 const Day = 'Day';
 const Week = 'Week';
