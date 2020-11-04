@@ -16,10 +16,18 @@ final class CallBackTest extends TestCase
 
         self::assertEquals('Bob', $callback->getName());
     }
-//
-//    public function testCallBackHasANameDateAndCallBackDate(): string
-//    {
-//        $callBack = new CallBack('Bob', '01/01/2015', 6 , 'days');
-//
-//    }
+
+    public function testCallBackCanAddTwoDateTogether(): void
+    {
+        $callBack = new CallBack('Bob', '01/01/2015', 6 , 'days');
+
+        self::assertEquals('07/01/2015' ,$callBack->getFutureDate());
+    }
+
+    public function testCallBackWillErrorWhenDateIsInvalidDateCalled(): void
+    {
+        $callBack = new CallBack('Bob', '01-01-2015', 6 , 'days');
+
+        self::assertEquals('Call date is invalid' , $callBack->getFutureDate());
+    }
 }
