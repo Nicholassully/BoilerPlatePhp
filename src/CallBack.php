@@ -42,14 +42,35 @@ class CallBack
 
     public function getFutureDate(): string
     {
-        $futureAmount = $this->furtureAmount;
         $timePeriod = $this->timePeriod;
         $formatDate = 'd/m/Y';
 
         if ($this->isValidFormat($this->dateCalled, $formatDate))
         {
             $dateCalled = Carbon::createFromFormat($formatDate, $this->dateCalled);
-            $dateToCallBack = $dateCalled->addDays($futureAmount);
+            $dateToCallBack = $dateCalled->addDays($this->furtureAmount);
+
+
+//            $weekMap = [
+//                0 => 'SU',
+//                1 => 'MO',
+//                2 => 'TU',
+//                3 => 'WE',
+//                4 => 'TH',
+//                5 => 'FR',
+//                6 => 'SA',
+//            ];
+//
+            // what day is it?
+//            $dayOfTheWeek = $dateToCallBack->isMonday();
+//            $weekday = $weekMap[$dayOfTheWeek];
+
+            //is it two hours ahead
+//            $timeForCallback = Carbon::parse('19:20:20');
+//            $timeNow = Carbon::now()->addHours(2);
+//            $isOkToCallBack = $timeForCallback->greaterThan($timeNow);
+//
+//            var_dump($isOkToCallBack);
 
             return $dateToCallBack->format($formatDate);
         }
