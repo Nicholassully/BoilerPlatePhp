@@ -18,12 +18,29 @@ class Card
 
     public function __construct($card)
     {
-        $this->value =  intval($card[0]);
-        $this->suit = $card[1];
+        $this->value = $this->extractValue($card[0]);
+        $this->suit = $card[0] === '1' ? $card[2] : $card[1];
     }
 
     public function __compareTo($cardPassedIn): int
     {
         return $this->value - $cardPassedIn->value;
+    }
+
+    private function extractValue(string $card) {
+        switch ($card[0]){
+            case '1':
+                return 10;
+            case 'J':
+                return 11;
+            case 'Q':
+                return 12;
+            case 'K':
+                return 13;
+            case 'A':
+                return 14;
+            default:
+                return intval($card[0]);
+        }
     }
 }

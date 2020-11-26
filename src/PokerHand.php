@@ -7,11 +7,6 @@ namespace BoilerPlatePhp;
 class PokerHand
 {
 
-//    public function __construct()
-//    {
-//
-//    }
-
     /**
      * @param array $hand
      * @return int|string
@@ -20,8 +15,7 @@ class PokerHand
     {
         $handWithValueAndSuit = [];
 
-        foreach ($hand as $card)
-        {
+        foreach ($hand as $card) {
             $handWithValueAndSuit[] = new Card($card);
         }
 
@@ -29,10 +23,8 @@ class PokerHand
 
         $cardCount = [];
 
-        foreach ($handWithValueAndSuit as $item)
-        {
-            if(!array_key_exists($item->value, $cardCount))
-            {
+        foreach ($handWithValueAndSuit as $item) {
+            if (!array_key_exists($item->value, $cardCount)) {
                 $cardCount[$item->value] = 1;
                 continue;
             }
@@ -40,25 +32,33 @@ class PokerHand
             $cardCount[$item->value]++;
         }
 
-        if($this->isThreeOfAKind($cardCount))
-        {
+        $checkForAtLeastOnePair = $this->pairOrTwoPair($cardCount);
+
+        if($this->isFourOfAKind($cardCount)) {
+            return 'Four of a kind';
+        }
+
+        if ($this->isThreeOfAKind($cardCount) && $checkForAtLeastOnePair) {
+            return 'Full house';
+        }
+
+        if ($this->isThreeOfAKind($cardCount)) {
             return 'Three of a kind';
         }
 
-        $checkForAtLeastOnePair = $this->pairOrTwo($cardCount);
-
-        if($checkForAtLeastOnePair)
-        {
+        if ($checkForAtLeastOnePair) {
             return $checkForAtLeastOnePair === 1 ? 'Pair' : 'Two Pair';
         }
 
-        if ($this->isStraight($handWithValueAndSuit))
-        {
+        if($this->isStraight($handWithValueAndSuit) && $this->isFlush($handWithValueAndSuit)) {
+            return 'Straight flush';
+        }
+
+        if ($this->isStraight($handWithValueAndSuit)) {
             return 'Straight';
         }
 
-        if ($this->isFlush($handWithValueAndSuit))
-        {
+        if ($this->isFlush($handWithValueAndSuit)) {
             return 'Flush';
         }
 
@@ -67,17 +67,20 @@ class PokerHand
 
     private function isThreeOfAKind(array $cardCount): bool
     {
-       return in_array(3, $cardCount);
+        return in_array(3, $cardCount);
     }
 
-    private function pairOrTwo(array $cardCount): int
+    private function isFourOfAKind(array $cardCount): bool
     {
-        if (in_array(2, $cardCount))
-        {
+        return in_array(4, $cardCount);
+    }
+
+    private function pairOrTwoPair(array $cardCount): int
+    {
+        if (in_array(2, $cardCount)) {
             $twoPair = array_count_values($cardCount);
 
-            if (in_array(2, $twoPair))
-            {
+            if (in_array(2, $twoPair)) {
                 return 2;
             }
 
@@ -103,7 +106,7 @@ class PokerHand
             break;
         }
 
-        if(count($playersHand) === 5) {
+        if (count($playersHand) === 5) {
             return true;
         }
 
@@ -121,7 +124,7 @@ class PokerHand
             }
 
             if ($playersHand !== $card->suit) {
-               return false;
+                return false;
             }
         }
 
