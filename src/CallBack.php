@@ -30,10 +30,16 @@ class CallBack
 
     public function isDateAndTimeForCallbackValid(): bool
     {
-        $isTodayDateBeforeOnePassedIn = (new Carbon('now'))->toDateString();
+        $todaysDateOnly = (new Carbon('now'))->toDateString();
+        $timePassedIn = Carbon::parse($this->getTimeTheyWantACallBack());
+        $earlierestOpeningTime = Carbon::parse('09:00:00');
+        $leastestClosingTime = Carbon::parse('20:00:00');
 
-        if ($this->getDateForCallBack() < $isTodayDateBeforeOnePassedIn)
-        {
+        if ($this->getDateForCallBack() < $todaysDateOnly) {
+            return false;
+        }
+
+        if ($timePassedIn->between($leastestClosingTime, $earlierestOpeningTime)) {
             return false;
         }
         return true;

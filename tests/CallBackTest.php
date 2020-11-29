@@ -15,9 +15,16 @@ class CallBackTest extends TestCase
         self::assertEquals('19:20:20', $callback->getTimeTheyWantACallBack());
     }
 
-    public function testIsTheDatePassedInBeforeTodaysDate()
+    public function testReturnsFalseWhenDatePassedInIsBeforeTodaysDate()
     {
         $callback = new CallBack('2020-11-28', '19:20:20');
+
+        self::assertEquals(false, $callback->isDateAndTimeForCallbackValid());
+    }
+
+    public function testReturnsFalseWhenTimePassedInIsNotBetweenOpeningTimes()
+    {
+        $callback = new CallBack('2020-11-28', '22:20:20');
 
         self::assertEquals(false, $callback->isDateAndTimeForCallbackValid());
     }
