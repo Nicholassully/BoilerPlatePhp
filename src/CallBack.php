@@ -31,25 +31,12 @@ class CallBack
     public function isDateAndTimeForCallbackValid(): bool
     {
         $todaysDateOnly = (new Carbon('now'))->toDateString();
-        $todaysTimeOnlyWithTwoHoursAdded =  Carbon::parse('now')->addHours(2);
+        $todaysTimeOnlyWithTwoHoursAdded = Carbon::parse('now')->addHours(2);
         $datePassin = Carbon::parse($this->dateForCallBack);
         $timePassedIn = Carbon::parse($this->getTimeTheyWantACallBack());
         $earlierestOpeningTime = Carbon::parse('09:00:00');
         $leastestClosingTime = Carbon::parse('20:00:00');
         $howManyDaysInTheFuture = $datePassin->diffInDays($todaysDateOnly);
-
-        $weekMap = [
-            0 => 'Sunday',
-            1 => 'Monday',
-            2 => 'Tuesday',
-            3 => 'Wednesday',
-            4 => 'Thursday',
-            5 => 'Friday',
-            6 => 'Saturday',
-        ];
-
-        $dayOfTheWeek = $datePassin->isSunday();
-        $weekday = $weekMap[$dayOfTheWeek];
 
         if ($this->getDateForCallBack() < $todaysDateOnly) {
             return false;
@@ -59,7 +46,7 @@ class CallBack
             return false;
         }
 
-        if ($weekday === 'Sunday') {
+        if ($datePassin->isSunday()) {
             return false;
         }
 
@@ -67,12 +54,16 @@ class CallBack
             return false;
         }
 
-
         if ($todaysDateOnly === $datePassin->toDateString()) {
             if ($timePassedIn->lessThan($todaysTimeOnlyWithTwoHoursAdded)) {
                 return false;
             }
-            return true;
+        } else {
+            if ($datePassin->isMonday() || $datePassin->isTuesday() || $datePassin->isWednesday()) {
+               if ($timePassedIn->between(Carbon::parse('09:00:00'), Carbon::parse('18:00:00'))) {
+                   return true;
+               }
+            }
         }
 
         return true;
