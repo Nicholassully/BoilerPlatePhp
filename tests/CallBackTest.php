@@ -35,4 +35,11 @@ class CallBackTest extends TestCase
 
         self::assertEquals(false, $callback->isDateAndTimeForCallbackValid());
     }
+
+    public function testReturnsFalseDatePassInIsMoreThenSixDaysInTheFuture()
+    {
+        $callback = new CallBack('2020-12-06', '19:20:20');
+
+        self::assertEquals(false, $callback->isDateAndTimeForCallbackValid());
+    }
 }

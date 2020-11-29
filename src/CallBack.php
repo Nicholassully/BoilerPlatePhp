@@ -35,6 +35,7 @@ class CallBack
         $timePassedIn = Carbon::parse($this->getTimeTheyWantACallBack());
         $earlierestOpeningTime = Carbon::parse('09:00:00');
         $leastestClosingTime = Carbon::parse('20:00:00');
+        $howManyDaysInTheFuture = $datePassin->diffInDays($todaysDateOnly);
 
         $weekMap = [
             0 => 'Sunday',
@@ -58,6 +59,10 @@ class CallBack
         }
 
         if ($weekday === 'Sunday') {
+            return false;
+        }
+
+        if ($howManyDaysInTheFuture > 6) {
             return false;
         }
 
