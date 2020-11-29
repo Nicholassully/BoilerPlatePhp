@@ -10,12 +10,12 @@ class CallBack
 {
     private string $dateForCallBack;
 
-    private string $timeTheyCalled;
+    private string $timeTheyWantACallBack;
 
-    public function __construct(string $dateForCallBack, string $timeTheyCalled)
+    public function __construct(string $dateForCallBack, string $timeTheyWantACallBack)
     {
         $this->dateForCallBack = $dateForCallBack;
-        $this->timeTheyCalled = $timeTheyCalled;
+        $this->timeTheyWantACallBack = $timeTheyWantACallBack;
     }
 
     public function getDateForCallBack(): string
@@ -25,7 +25,7 @@ class CallBack
 
     public function getTimeTheyWantACallBack(): string
     {
-        return $this->timeTheyCalled;
+        return $this->timeTheyWantACallBack;
     }
 
 }
