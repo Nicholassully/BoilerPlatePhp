@@ -11,65 +11,65 @@ class CallBackTest extends TestCase
     {
         $callback = new CallBack('01/01/2015', '19:20:20', '2020-11-29', '14:00:00');
 
-        self::assertEquals('01/01/2015', $callback->getDateForCallBack());
-        self::assertEquals('19:20:20', $callback->getTimeTheyWantACallBack());
-        self::assertEquals('2020-11-29', $callback->getDateOfCall());
-        self::assertEquals('14:00:00', $callback->getTimeOfCall());
+        self::assertEquals('01/01/2015', $callback->getDateCallBackRequested());
+        self::assertEquals('19:20:20', $callback->getTimeCallBackRequested());
+        self::assertEquals('2020-11-29', $callback->getDateUserMadeContact());
+        self::assertEquals('14:00:00', $callback->getTimeUserMadeContact());
     }
 
-    public function testReturnsFalseWhenDatePassedInIsBeforeTodaysDate()
+    public function testReturnsFalseWhenDatePassedInIsBeforeUserMadeContact()
     {
         $callback = new CallBack('2020-11-28', '19:20:20', '2020-11-29', '14:00:00');
 
-        self::assertEquals(false, $callback->isDateAndTimeForCallbackValid());
+        self::assertEquals(false, $callback->isDateAndTimeForCallBackRequestValid());
     }
 
-    public function testReturnsFalseWhenTimePassedInIsNotBetweenOpeningTimes()
+    public function testReturnsFalseWhenTimeCallBackRequestedIsNotBetweenEarliestAndLatestOpeningTimes()
     {
         $callback = new CallBack('2020-11-29', '22:20:20', '2020-11-29', '14:00:00');
 
-        self::assertEquals(false, $callback->isDateAndTimeForCallbackValid());
+        self::assertEquals(false, $callback->isDateAndTimeForCallBackRequestValid());
     }
 
-    public function testReturnsFalseDatePassInIsASunday()
+    public function testReturnsFalseWhenDateCallBackRequestedIsASunday()
     {
         $callback = new CallBack('2020-11-29', '19:20:20', '2020-11-29', '14:00:00');
 
-        self::assertEquals(false, $callback->isDateAndTimeForCallbackValid());
+        self::assertEquals(false, $callback->isDateAndTimeForCallBackRequestValid());
     }
 
-    public function testReturnsFalseDatePassInIsMoreThenSixDaysInTheFuture()
+    public function testReturnsFalseWhenDateCallBackRequestedIsMoreThenSixDaysFromDateUserMadeContact()
     {
         $callback = new CallBack('2020-12-08', '19:20:20', '2020-11-30', '14:00:00');
 
-        self::assertEquals(false, $callback->isDateAndTimeForCallbackValid());
+        self::assertEquals(false, $callback->isDateAndTimeForCallBackRequestValid());
     }
 
-    public function testReturnsFalseDatePassInIsTheSameAsTodayAndNotTwoHoursInTheFuture()
+    public function testReturnsFalseWhenDateCallBackRequestedIsTheSameAsDateUserMadeContactAndNotMoreThanTwoHoursInTheFuture()
     {
         $callback = new CallBack('2020-11-30', '12:20:20', '2020-11-30', '14:00:00');
 
-        self::assertEquals(false, $callback->isDateAndTimeForCallbackValid());
+        self::assertEquals(false, $callback->isDateAndTimeForCallBackRequestValid());
     }
 
-    public function testReturnsTrueDatePassInIsAMondayAndTimeIsValid()
+    public function testReturnsTrueWhenDateCallBackRequestedIsAMondayAndTimeCallBackRequestedIsBetweenMondayOpeningTimes()
     {
         $callback = new CallBack('2020-11-30', '16:20:20', '2020-11-29', '14:00:00');
 
-        self::assertEquals(true, $callback->isDateAndTimeForCallbackValid());
+        self::assertEquals(true, $callback->isDateAndTimeForCallBackRequestValid());
     }
 
-    public function testReturnsTrueDatePassInIsAThursdayAndTimeIsValid()
+    public function testReturnsTrueWhenDateCallBackRequestedIsAThursdayAndTimeCallBackRequestedIsBetweenThursdayOpeningTimes()
     {
         $callback = new CallBack('2020-12-03', '19:20:20', '2020-11-29', '14:00:00');
 
-        self::assertEquals(true, $callback->isDateAndTimeForCallbackValid());
+        self::assertEquals(true, $callback->isDateAndTimeForCallBackRequestValid());
     }
 
-    public function testReturnsTrueDatePassInIsASaturdayAndTimeIsValid()
+    public function testReturnsTrueWhenDateCallBackRequestedIsASaturdayAndTimeCallBackRequestedIsBetweenSaturdayOpeningTimes()
     {
         $callback = new CallBack('2020-12-05', '12:30:00', '2020-11-29', '14:00:00');
 
-        self::assertEquals(true, $callback->isDateAndTimeForCallbackValid());
+        self::assertEquals(true, $callback->isDateAndTimeForCallBackRequestValid());
     }
 }

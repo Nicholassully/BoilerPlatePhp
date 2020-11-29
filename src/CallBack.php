@@ -8,116 +8,130 @@ use Carbon\Carbon;
 
 class CallBack
 {
-    private string $dateForCallBack;
+    private string $dateCallBackRequested;
 
-    private string $timeTheyWantACallBack;
+    private string $timeCallBackRequested;
 
-    private string $dateOfCall;
+    private string $dateUserMadeContact;
 
-    private string $timeOfCall;
+    private string $timeUserMadeContact;
 
-    private string $todaysDateOnly;
+    private Carbon $callCenterOpeningTime;
 
-    private Carbon $todaysTimeOnlyWithTwoHoursAdded;
+    private Carbon $latestCallCenterClosingTime;
 
-    private Carbon $datePassin;
+    private Carbon $changeDateCallBackRequestedToACarbonDate;
 
-    private Carbon $timePassedIn;
-
-    private Carbon $earlierestOpeningTime;
-
-    private Carbon $leastestClosingTime;
-
-    private int $howManyDaysInTheFuture;
-
+    private Carbon $changeTimeCallBackRequestedToACarbonDate;
 
     public function __construct(
-        string $dateForCallBack,
-        string $timeTheyWantACallBack,
-        string $dateOfCall,
-        string $timeOfCall
+        string $dateCallBackRequested,
+        string $timeCallBackRequested,
+        string $dateUserMadeContact,
+        string $timeUserMadeContact
     ) {
-        $this->dateForCallBack = $dateForCallBack;
-        $this->timeTheyWantACallBack = $timeTheyWantACallBack;
-        $this->dateOfCall = $dateOfCall;
-        $this->timeOfCall = $timeOfCall;
+        $this->dateCallBackRequested = $dateCallBackRequested;
+        $this->timeCallBackRequested = $timeCallBackRequested;
+        $this->dateUserMadeContact = $dateUserMadeContact;
+        $this->timeUserMadeContact = $timeUserMadeContact;
     }
 
-    public function getDateForCallBack(): string
+    public function getDateCallBackRequested(): string
     {
-        return $this->dateForCallBack;
+        return $this->dateCallBackRequested;
     }
 
-    public function getTimeTheyWantACallBack(): string
+    public function getTimeCallBackRequested(): string
     {
-        return $this->timeTheyWantACallBack;
+        return $this->timeCallBackRequested;
     }
 
-    public function getDateOfCall(): string
+    public function getDateUserMadeContact(): string
     {
-        return $this->dateOfCall;
+        return $this->dateUserMadeContact;
     }
 
-    public function getTimeOfCall(): string
+    public function getTimeUserMadeContact(): string
     {
-        return $this->timeOfCall;
+        return $this->timeUserMadeContact;
     }
 
-
-    public function isDateAndTimeForCallbackValid(): bool
+    public function isDateAndTimeForCallBackRequestValid(): bool
     {
-        $this->todaysDateOnly = Carbon::parse($this->getDateOfCall())->toDateString();
-        $this->todaysTimeOnlyWithTwoHoursAdded = Carbon::parse($this->getTimeOfCall())->addHours(2);
-        $this->datePassin = Carbon::parse($this->dateForCallBack);
-        $this->timePassedIn = Carbon::parse($this->getTimeTheyWantACallBack());
-        $this->earlierestOpeningTime = Carbon::parse('09:00:00');
-        $this->leastestClosingTime = Carbon::parse('20:00:00');
-        $this->howManyDaysInTheFuture = $this->datePassin->diffInDays($this->todaysDateOnly);
+        $timeUserMadeContactWithTwoHoursAdded = Carbon::parse($this->getTimeUserMadeContact())->addHours(2);
+        $this->changeDateCallBackRequestedToACarbonDate = Carbon::parse($this->getDateCallBackRequested());
+        $this->changeTimeCallBackRequestedToACarbonDate = Carbon::parse($this->getTimeCallBackRequested());
+        $this->callCenterOpeningTime = Carbon::parse('09:00:00');
+        $this->latestCallCenterClosingTime = Carbon::parse('20:00:00');
+        $howManyDaysInTheFuture = $this->changeDateCallBackRequestedToACarbonDate->diffInDays(
+            $this->getDateUserMadeContact()
+        );
 
-        if ($this->getDateForCallBack() < $this->todaysDateOnly) {
+        if ($this->getDateCallBackRequested() < $this->getDateUserMadeContact()) {
             return false;
         }
 
-        if (!$this->timePassedIn->between($this->leastestClosingTime, $this->earlierestOpeningTime)) {
+        if (!$this->changeTimeCallBackRequestedToACarbonDate->between(
+            $this->latestCallCenterClosingTime,
+            $this->callCenterOpeningTime
+        )
+        ) {
             return false;
         }
 
-        if ($this->datePassin->isSunday()) {
+        if ($this->changeDateCallBackRequestedToACarbonDate->isSunday()) {
             return false;
         }
 
-        if ($this->howManyDaysInTheFuture > 6) {
+        if ($howManyDaysInTheFuture > 6) {
             return false;
         }
 
-        if ($this->todaysDateOnly === $this->datePassin->toDateString()) {
-            if ($this->timePassedIn->greaterThan($this->todaysTimeOnlyWithTwoHoursAdded)) {
-                $this->checkTheDayAndTime();
+        if ($this->getDateUserMadeContact() === $this->changeDateCallBackRequestedToACarbonDate->toDateString()) {
+            if ($this->changeTimeCallBackRequestedToACarbonDate->greaterThan($timeUserMadeContactWithTwoHoursAdded)) {
+                $this->checkDayAndTimeOfRequestAgainstOpeningHours();
             }
             return false;
         } else {
-            $this->checkTheDayAndTime();
+            $this->checkDayAndTimeOfRequestAgainstOpeningHours();
         }
 
         return true;
     }
 
-    private function checkTheDayAndTime()
+    private function checkDayAndTimeOfRequestAgainstOpeningHours()
     {
-        if (($this->datePassin->isMonday() || $this->datePassin->isTuesday() || $this->datePassin->isWednesday())) {
-            if ($this->timePassedIn->between($this->earlierestOpeningTime, Carbon::parse('18:00:00'))) {
+        if ($this->changeDateCallBackRequestedToACarbonDate->isMonday()
+            || $this->changeDateCallBackRequestedToACarbonDate->isTuesday()
+            || $this->changeDateCallBackRequestedToACarbonDate->isWednesday()
+        ) {
+            if ($this->changeTimeCallBackRequestedToACarbonDate->between(
+                $this->callCenterOpeningTime,
+                Carbon::parse('18:00:00')
+            )
+            ) {
                 return true;
             }
             return false;
         }
-        if (($this->datePassin->isThursday() || $this->datePassin->isFriday())) {
-            if ($this->timePassedIn->between($this->earlierestOpeningTime, $this->leastestClosingTime)) {
+        if ($this->changeDateCallBackRequestedToACarbonDate->isThursday()
+            || $this->changeDateCallBackRequestedToACarbonDate->isFriday()
+        ) {
+            if ($this->changeTimeCallBackRequestedToACarbonDate->between(
+                $this->callCenterOpeningTime,
+                $this->latestCallCenterClosingTime
+            )
+            ) {
                 return true;
             }
             return false;
         }
-        if ($this->datePassin->isSaturday()) {
-            if ($this->timePassedIn->between($this->earlierestOpeningTime, Carbon::parse('12:30:00'))) {
+        if ($this->changeDateCallBackRequestedToACarbonDate->isSaturday()) {
+            if ($this->changeTimeCallBackRequestedToACarbonDate->between(
+                $this->callCenterOpeningTime,
+                Carbon::parse('12:30:00')
+            )
+            ) {
                 return true;
             }
             return false;
