@@ -28,4 +28,15 @@ class CallBack
         return $this->timeTheyWantACallBack;
     }
 
+    public function isDateAndTimeForCallbackValid(): bool
+    {
+        $isTodayDateBeforeOnePassedIn = (new Carbon('now'))->toDateString();
+
+        if ($this->getDateForCallBack() < $isTodayDateBeforeOnePassedIn)
+        {
+            return false;
+        }
+        return true;
+    }
+
 }
