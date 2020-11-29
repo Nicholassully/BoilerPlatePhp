@@ -59,15 +59,23 @@ class CallBack
                 return false;
             }
         } else {
-            if ($datePassin->isMonday() || $datePassin->isTuesday() || $datePassin->isWednesday()) {
-               if ($timePassedIn->between(Carbon::parse('09:00:00'), Carbon::parse('18:00:00'))) {
+            if (($datePassin->isMonday() || $datePassin->isTuesday() || $datePassin->isWednesday())) {
+                if ($timePassedIn->between(Carbon::parse('09:00:00'), Carbon::parse('18:00:00'))) {
                    return true;
                }
+                return false;
             }
             if ($datePassin->isThursday() || $datePassin->isFriday()) {
                 if ($timePassedIn->between(Carbon::parse('09:00:00'), Carbon::parse('20:00:00'))) {
                     return true;
                 }
+                return false;
+            }
+            if ($datePassin->isSaturday()) {
+                if ($timePassedIn->between(Carbon::parse('09:00:00'), Carbon::parse('12:30:00'))) {
+                    return true;
+                }
+                return false;
             }
         }
 
