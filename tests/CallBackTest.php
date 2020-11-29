@@ -24,7 +24,7 @@ class CallBackTest extends TestCase
 
     public function testReturnsFalseWhenTimePassedInIsNotBetweenOpeningTimes()
     {
-        $callback = new CallBack('2020-11-28', '22:20:20');
+        $callback = new CallBack('2020-11-29', '22:20:20');
 
         self::assertEquals(false, $callback->isDateAndTimeForCallbackValid());
     }

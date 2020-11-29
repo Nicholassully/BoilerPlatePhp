@@ -35,11 +35,13 @@ class CallBack
         $earlierestOpeningTime = Carbon::parse('09:00:00');
         $leastestClosingTime = Carbon::parse('20:00:00');
 
+        var_dump($timePassedIn->between($leastestClosingTime, $earlierestOpeningTime));
+
         if ($this->getDateForCallBack() < $todaysDateOnly) {
             return false;
         }
 
-        if ($timePassedIn->between($leastestClosingTime, $earlierestOpeningTime)) {
+        if (!$timePassedIn->between($leastestClosingTime, $earlierestOpeningTime)) {
             return false;
         }
         return true;
