@@ -16,6 +16,21 @@ class CallBack
 
     private string $timeOfCall;
 
+    private string $todaysDateOnly;
+
+    private Carbon $todaysTimeOnlyWithTwoHoursAdded;
+
+    private Carbon $datePassin;
+
+    private Carbon $timePassedIn;
+
+    private Carbon $earlierestOpeningTime;
+
+    private Carbon $leastestClosingTime;
+
+    private int $howManyDaysInTheFuture;
+
+
     public function __construct(
         string $dateForCallBack,
         string $timeTheyWantACallBack,
@@ -51,73 +66,61 @@ class CallBack
 
     public function isDateAndTimeForCallbackValid(): bool
     {
-        $todaysDateOnly = Carbon::parse($this->getDateOfCall());
-        $todaysTimeOnlyWithTwoHoursAdded = Carbon::parse($this->getTimeOfCall())->addHours(2);
-        $datePassin = Carbon::parse($this->dateForCallBack);
-        $timePassedIn = Carbon::parse($this->getTimeTheyWantACallBack());
-        $earlierestOpeningTime = Carbon::parse('09:00:00');
-        $leastestClosingTime = Carbon::parse('20:00:00');
-        $howManyDaysInTheFuture = $datePassin->diffInDays($todaysDateOnly);
+        $this->todaysDateOnly = Carbon::parse($this->getDateOfCall())->toDateString();
+        $this->todaysTimeOnlyWithTwoHoursAdded = Carbon::parse($this->getTimeOfCall())->addHours(2);
+        $this->datePassin = Carbon::parse($this->dateForCallBack);
+        $this->timePassedIn = Carbon::parse($this->getTimeTheyWantACallBack());
+        $this->earlierestOpeningTime = Carbon::parse('09:00:00');
+        $this->leastestClosingTime = Carbon::parse('20:00:00');
+        $this->howManyDaysInTheFuture = $this->datePassin->diffInDays($this->todaysDateOnly);
 
-        if ($this->getDateForCallBack() < $todaysDateOnly) {
+        if ($this->getDateForCallBack() < $this->todaysDateOnly) {
             return false;
         }
 
-        if (!$timePassedIn->between($leastestClosingTime, $earlierestOpeningTime)) {
+        if (!$this->timePassedIn->between($this->leastestClosingTime, $this->earlierestOpeningTime)) {
             return false;
         }
 
-        if ($datePassin->isSunday()) {
+        if ($this->datePassin->isSunday()) {
             return false;
         }
 
-        if ($howManyDaysInTheFuture > 6) {
+        if ($this->howManyDaysInTheFuture > 6) {
             return false;
         }
 
-        if ($todaysDateOnly === $datePassin->toDateString()) {
-            if ($timePassedIn->lessThan($todaysTimeOnlyWithTwoHoursAdded)) {
-                if (($datePassin->isMonday() || $datePassin->isTuesday() || $datePassin->isWednesday())) {
-                    if ($timePassedIn->between(Carbon::parse('09:00:00'), Carbon::parse('18:00:00'))) {
-                        return true;
-                    }
-                    return false;
-                }
-                if ($datePassin->isThursday() || $datePassin->isFriday()) {
-                    if ($timePassedIn->between(Carbon::parse('09:00:00'), Carbon::parse('20:00:00'))) {
-                        return true;
-                    }
-                    return false;
-                }
-                if ($datePassin->isSaturday()) {
-                    if ($timePassedIn->between(Carbon::parse('09:00:00'), Carbon::parse('12:30:00'))) {
-                        return true;
-                    }
-                    return false;
-                }
-                return false;
+        if ($this->todaysDateOnly === $this->datePassin->toDateString()) {
+            if ($this->timePassedIn->greaterThan($this->todaysTimeOnlyWithTwoHoursAdded)) {
+                $this->checkTheDayAndTime();
             }
+            return false;
         } else {
-            if (($datePassin->isMonday() || $datePassin->isTuesday() || $datePassin->isWednesday())) {
-                if ($timePassedIn->between(Carbon::parse('09:00:00'), Carbon::parse('18:00:00'))) {
-                    return true;
-                }
-                return false;
-            }
-            if ($datePassin->isThursday() || $datePassin->isFriday()) {
-                if ($timePassedIn->between(Carbon::parse('09:00:00'), Carbon::parse('20:00:00'))) {
-                    return true;
-                }
-                return false;
-            }
-            if ($datePassin->isSaturday()) {
-                if ($timePassedIn->between(Carbon::parse('09:00:00'), Carbon::parse('12:30:00'))) {
-                    return true;
-                }
-                return false;
-            }
+            $this->checkTheDayAndTime();
         }
 
         return true;
+    }
+
+    private function checkTheDayAndTime()
+    {
+        if (($this->datePassin->isMonday() || $this->datePassin->isTuesday() || $this->datePassin->isWednesday())) {
+            if ($this->timePassedIn->between($this->earlierestOpeningTime, Carbon::parse('18:00:00'))) {
+                return true;
+            }
+            return false;
+        }
+        if (($this->datePassin->isThursday() || $this->datePassin->isFriday())) {
+            if ($this->timePassedIn->between($this->earlierestOpeningTime, $this->leastestClosingTime)) {
+                return true;
+            }
+            return false;
+        }
+        if ($this->datePassin->isSaturday()) {
+            if ($this->timePassedIn->between($this->earlierestOpeningTime, Carbon::parse('12:30:00'))) {
+                return true;
+            }
+            return false;
+        }
     }
 }
