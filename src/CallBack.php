@@ -64,6 +64,11 @@ class CallBack
                    return true;
                }
             }
+            if ($datePassin->isThursday() || $datePassin->isFriday()) {
+                if ($timePassedIn->between(Carbon::parse('09:00:00'), Carbon::parse('20:00:00'))) {
+                    return true;
+                }
+            }
         }
 
         return true;
