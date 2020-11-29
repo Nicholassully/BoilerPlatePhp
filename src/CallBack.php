@@ -31,11 +31,23 @@ class CallBack
     public function isDateAndTimeForCallbackValid(): bool
     {
         $todaysDateOnly = (new Carbon('now'))->toDateString();
+        $datePassin = Carbon::parse($this->dateForCallBack);
         $timePassedIn = Carbon::parse($this->getTimeTheyWantACallBack());
         $earlierestOpeningTime = Carbon::parse('09:00:00');
         $leastestClosingTime = Carbon::parse('20:00:00');
 
-        var_dump($timePassedIn->between($leastestClosingTime, $earlierestOpeningTime));
+        $weekMap = [
+            0 => 'Sunday',
+            1 => 'Monday',
+            2 => 'Tuesday',
+            3 => 'Wednesday',
+            4 => 'Thursday',
+            5 => 'Friday',
+            6 => 'Saturday',
+        ];
+
+        $dayOfTheWeek = $datePassin->isSunday();
+        $weekday = $weekMap[$dayOfTheWeek];
 
         if ($this->getDateForCallBack() < $todaysDateOnly) {
             return false;
@@ -44,6 +56,11 @@ class CallBack
         if (!$timePassedIn->between($leastestClosingTime, $earlierestOpeningTime)) {
             return false;
         }
+
+        if ($weekday === 'Sunday') {
+            return false;
+        }
+
         return true;
     }
 
