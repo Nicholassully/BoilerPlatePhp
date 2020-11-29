@@ -42,4 +42,11 @@ class CallBackTest extends TestCase
 
         self::assertEquals(false, $callback->isDateAndTimeForCallbackValid());
     }
+
+    public function testReturnsTrueDatePassInIsTheSameAsToday()
+    {
+        $callback = new CallBack('2020-11-29', '12:20:20');
+
+        self::assertEquals(false, $callback->isDateAndTimeForCallbackValid());
+    }
 }

@@ -31,6 +31,7 @@ class CallBack
     public function isDateAndTimeForCallbackValid(): bool
     {
         $todaysDateOnly = (new Carbon('now'))->toDateString();
+        $todaysTimeOnlyWithTwoHoursAdded =  Carbon::parse('now')->addHours(2);
         $datePassin = Carbon::parse($this->dateForCallBack);
         $timePassedIn = Carbon::parse($this->getTimeTheyWantACallBack());
         $earlierestOpeningTime = Carbon::parse('09:00:00');
@@ -64,6 +65,14 @@ class CallBack
 
         if ($howManyDaysInTheFuture > 6) {
             return false;
+        }
+
+
+        if ($todaysDateOnly === $datePassin->toDateString()) {
+            if ($timePassedIn->lessThan($todaysTimeOnlyWithTwoHoursAdded)) {
+                return false;
+            }
+            return true;
         }
 
         return true;
