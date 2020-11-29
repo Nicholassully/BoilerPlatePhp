@@ -14,7 +14,8 @@ class CallBackTest extends TestCase
         $callback = new CallBack('01/01/2015','19:20:20');
 
         self::assertEquals('01/01/2015', $callback->getDateForCallBack());
-        self::assertEquals('19:20:20', $callback->getTimeTheyCalled());
-
+        self::assertEquals('19:20:20', $callback->getTimeTheyWantACallBack());
     }
+
+
 }

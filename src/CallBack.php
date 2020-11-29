@@ -23,7 +23,7 @@ class CallBack
         return $this->dateForCallBack;
     }
 
-    public function getTimeTheyCalled(): string
+    public function getTimeTheyWantACallBack(): string
     {
         return $this->timeTheyCalled;
     }
