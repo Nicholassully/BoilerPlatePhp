@@ -10,12 +10,10 @@
       
 3. To run test the command is composer test
 
-4. Using Carbon in this for anything to do with time to use it <br/> 
-have a used statement at the top looking like `use Carbon\Carbon;`<br/>
-then just call it like `Carbon::now();` or many others docs found<br/>
-https://carbon.nesbot.com/#gettingstarted
+This kata is to make a password checker to and return false if any of the following is not valid 
 
-5. Installing Carbon is by running `composer require nesbot/carbon`<br/>
-in the command line
-
-
+1. Have more than 8 characters
+2. Contains a capital letter
+3. Contains a lowercase
+4. Contains a number
+5. Contains an underscore
