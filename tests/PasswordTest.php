@@ -9,13 +9,13 @@ final class PasswordTest extends TestCase
     public function testIsPasswordValidReturnsFalse(): void
     {
         $password = new Password();
-        self::assertFalse($password->isPasswordValid("false"));
+        self::assertSame("InValid", $password->isPasswordValid(""));
     }
 
     public function testIsPasswordValidReturnsTrue(): void
     {
         $password = new Password();
-        self::assertTrue($password->isPasswordValid("Tr_uet5rue"));
+        self::assertSame("Valid", $password->isPasswordValid("Tr_uet5rue"));
     }
 
     public function testIsEightOrMoreCharactersReturnsFalse(): void
