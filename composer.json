@@ -10,8 +10,5 @@
     },
     "scripts" : {
         "test" : "./vendor/bin/phpunit-watcher watch --bootstrap vendor/autoload.php tests/"
-    },
-    "require": {
-        "nesbot/carbon": "^2.41"
     }
 }
